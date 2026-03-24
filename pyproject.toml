@@ -1,0 +1,11 @@
+[project]
+name = "the-quant-mind-reader"
+version = "0.1.0"
+description = "Live stage demo with a quant-style prediction display and operator control panel."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+	"fastapi",
+	"jinja2",
+	"uvicorn[standard]",
+]

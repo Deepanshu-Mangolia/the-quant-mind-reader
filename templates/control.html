@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Operator Panel</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="control-body">
+    <div class="control-panel">
+        <h2>Operator Control Panel</h2>
+
+        <!-- Step 1 -->
+        <div class="step-card">
+            <div class="step-header">Step 1 — Subject's First Number (N1)</div>
+            <div class="step-hint">Ask audience: any 4-digit number (1000–9999)</div>
+            <label for="n1">N1</label>
+            <input type="number" id="n1" min="1000" max="9999" placeholder="e.g. 6357">
+            <button type="button" onclick="setN1()">Set N1 &amp; Seal Prediction</button>
+            <div id="prediction-display" class="computed-display hidden">
+                SEALED PREDICTION: <strong id="prediction-value"></strong>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card">
+            <div class="step-header">Step 2 — Subject's Second Number (N2)</div>
+            <div class="step-hint">Ask audience: 4-digit number (1000–8999)</div>
+            <label for="n2">N2</label>
+            <input type="number" id="n2" min="1000" max="8999" placeholder="e.g. 3231">
+            <button type="button" onclick="setN2()">Set N2</button>
+            <div id="n3-display" class="computed-display hidden">
+                YOUR RESPONSE — write down N3: <strong id="n3-value"></strong>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card">
+            <div class="step-header">Step 3 — Subject's Third Number (N4)</div>
+            <div class="step-hint">Ask audience: 4-digit number (1000–8999)</div>
+            <label for="n4">N4</label>
+            <input type="number" id="n4" min="1000" max="8999" placeholder="e.g. 4620">
+            <button type="button" onclick="setN4()">Set N4</button>
+            <div id="n5-display" class="computed-display hidden">
+                YOUR RESPONSE — write down N5: <strong id="n5-value"></strong>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="step-card">
+            <div class="step-header">Actions</div>
+            <div class="control-actions">
+                <button type="button" onclick="doReveal()">Reveal</button>
+                <button type="button" onclick="doHide()">Hide</button>
+                <button type="button" onclick="doClear()">Clear</button>
+            </div>
+        </div>
+
+        <h3>Live State</h3>
+        <pre id="current-state">Connecting...</pre>
+    </div>
+
+    <script>
+        const ws = new WebSocket(`ws://${location.host}/ws`);
+
+        ws.onmessage = (event) => {
+            const state = JSON.parse(event.data);
+            document.getElementById("current-state").textContent = JSON.stringify(state, null, 2);
+
+            if (state.prediction !== null) {
+                document.getElementById("prediction-value").textContent = state.prediction;
+                document.getElementById("prediction-display").classList.remove("hidden");
+            }
+            if (state.n3 !== null) {
+                document.getElementById("n3-value").textContent = state.n3;
+                document.getElementById("n3-display").classList.remove("hidden");
+            }
+            if (state.n5 !== null) {
+                document.getElementById("n5-value").textContent = state.n5;
+                document.getElementById("n5-display").classList.remove("hidden");
+            }
+        };
+
+        function setN1() {
+            ws.send(JSON.stringify({ action: "set_n1", value: document.getElementById("n1").value }));
+        }
+        function setN2() {
+            ws.send(JSON.stringify({ action: "set_n2", value: document.getElementById("n2").value }));
+        }
+        function setN4() {
+            ws.send(JSON.stringify({ action: "set_n4", value: document.getElementById("n4").value }));
+        }
+        function doReveal() {
+            ws.send(JSON.stringify({ action: "reveal" }));
+        }
+        function doHide() {
+            ws.send(JSON.stringify({ action: "hide" }));
+        }
+        function doClear() {
+            document.getElementById("prediction-display").classList.add("hidden");
+            document.getElementById("n3-display").classList.add("hidden");
+            document.getElementById("n5-display").classList.add("hidden");
+            ws.send(JSON.stringify({ action: "clear" }));
+        }
+    </script>
+</body>
+</html>

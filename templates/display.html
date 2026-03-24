@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quant Mind Reader</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="terminal-body">
+    <div class="terminal-container">
+        <div class="header">QUANT BEHAVIORAL INFERENCE TERMINAL v3.4</div>
+
+        <div class="logs">
+            <div>&gt; Initializing number sequence model...</div>
+            <div>&gt; Loading behavioral prediction matrix...</div>
+            <div>&gt; Calibrating inference engine...</div>
+            <div>&gt; Awaiting subject input...</div>
+        </div>
+
+        <!-- Sealed prediction — visible once N1 is entered -->
+        <div id="prediction-seal" class="prediction-seal hidden">
+            <span class="seal-label">PREDICTION SEALED</span>
+            <span id="seal-value" class="seal-value">████████████</span>
+        </div>
+
+        <!-- Progressive number sequence table -->
+        <div id="sequence-box" class="sequence-box hidden">
+            <div class="seq-divider">------------------------------------------</div>
+            <div class="seq-title">NUMBER SEQUENCE LOG</div>
+            <div class="seq-divider">------------------------------------------</div>
+            <div id="sequence-content"></div>
+            <div class="seq-divider" id="bottom-divider">------------------------------------------</div>
+            <div id="total-row" class="seq-row total-row hidden">
+                <span class="seq-label">TOTAL</span>
+                <span id="total-value" class="seq-value"></span>
+            </div>
+        </div>
+
+        <!-- Query typing area -->
+        <div class="query-box">
+            <span class="prompt">&gt;</span>
+            <span id="typed-query"></span>
+            <span class="cursor">&#9608;</span>
+        </div>
+
+        <!-- Final match reveal -->
+        <div id="match-box" class="prediction-box hidden">
+            <div>------------------------------------------</div>
+            <div>VERIFICATION RESULT</div>
+            <div>------------------------------------------</div>
+            <div id="match-content"></div>
+            <div>------------------------------------------</div>
+            <div class="footer">Model Confidence: 99.7% | Latency: 11 ms</div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
